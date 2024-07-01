@@ -3,14 +3,18 @@
 Django Browserless is a package that offers Django and Django REST framework views for generating PDFs from any URL using [browserless](https://www.browserless.io/).
 
 ## Table of Contents
-- [Features](#features)
-- [Requirements](#requirements)
-- [Getting Started](#getting-started)
-- [Usage](#usage)
-- [Configuration](#configuration)
-- [How It Works](#how-it-works)
-- [Contributing](#contributing)
-- [License](#license)
+- [Django Browserless](#django-browserless)
+  - [Table of Contents](#table-of-contents)
+  - [Features](#features)
+  - [Requirements](#requirements)
+  - [Getting started](#getting-started)
+  - [Generating PDFs from views requiring authentication](#generating-pdfs-from-views-requiring-authentication)
+  - [Specifying browserless options](#specifying-browserless-options)
+  - [Additional configuration options](#additional-configuration-options)
+    - [Authentication timeout](#authentication-timeout)
+    - [Default browserless timeout](#default-browserless-timeout)
+    - [Default PDF generation options](#default-pdf-generation-options)
+  - [How it works](#how-it-works)
 
 ## Features
 - Generate a PDF from any URL
@@ -166,7 +170,7 @@ At its core, `django-browserless` consists in two parts:
  - A thin wrapper around the [browserless PDF HTTP API](https://docs.browserless.io/HTTP-APIs/pdf).
  - A custom authentication mechanism that allow browserless to impersonate the user's who requested the PDF generation.
 
-Indeed, ore often than not, when the page to turn into a PDF contain user-specific content and require authentication. However, as browserless is a 3rd-party service, it is not authenticated as the user who requested the PDF generation.
+Indeed, more often than not, the page to turn into a PDF contains user-specific content and requires authentication. However, as browserless is a 3rd-party service, it is not authenticated as the user who requested the PDF generation.
 
 `django-browserless` addresses this issue using a custom, time-limited authentication mechanism. Here is how it is implemented:
 - Whenever a page is requested to be turned into a PDF, a random secret is generated, associated with request's user and page, and stored for a short period of time. In a typical production setup with multiple Python processes that don't share memory, the required data must be accessible to all processes. This leaves the database and the global cache as the most straightforward options. The global cache is faster and has a built-in expiration time mechanism so it's used rather than the database.
