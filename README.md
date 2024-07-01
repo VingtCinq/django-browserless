@@ -9,6 +9,7 @@ Django Browserless is a package that offers Django and Django REST framework vie
   - [Requirements](#requirements)
   - [Getting started](#getting-started)
   - [Generating PDFs from views requiring authentication](#generating-pdfs-from-views-requiring-authentication)
+  - [Using from Python code](#using-from-python-code)
   - [Specifying browserless options](#specifying-browserless-options)
   - [Additional configuration options](#additional-configuration-options)
     - [Authentication timeout](#authentication-timeout)
@@ -26,7 +27,7 @@ Django Browserless is a package that offers Django and Django REST framework vie
 
  - Python 3.8+
   - Django 4.2+
-  - Django REST framework 3.14+
+  - Django REST framework 3.12+
 
 ## Getting started
 
@@ -111,6 +112,23 @@ class AuthenticatedAPIView(APIView):
 
     def get(self, request):
         return HttpResponse(f"Hello {request.user.username}!")
+```
+
+## Using from Python code
+
+Apart from the views that can be called from the frontend `django-browserless` can also be used directly from Python code on the backend.
+```python
+from django_browserless import pdf
+
+pdf_content = pdf.from_url(url="http://example.com")
+
+# A user can be specified if browserless need to call views that require authentication:
+pdf_content = pdf.from_url(url="https://project.tld/export/", as_user_id=1)
+
+# Browserless options can also be passed as a dictionary:
+pdf_content = pdf.from_url(
+    url="https://example.com", browserless_options={"landscape": True}
+)
 ```
 
 ## Specifying browserless options

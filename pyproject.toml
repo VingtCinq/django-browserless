@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "django-browserless"
-version = "0.1.0"
+version = "0.1.1"
 description = "Genreate PDFs from URLs using browserless"
 authors = ["Sylvain Gable <sylvain@vingtcinq.io>"]
 license = "MIT License"
