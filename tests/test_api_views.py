@@ -1,8 +1,9 @@
 from http import HTTPStatus
 
 import pytest
-from django_browserless.views import drf_views
 from rest_framework.test import APIRequestFactory
+
+from django_browserless.views import drf_views
 
 pdf_view = drf_views.UrlToPdf.as_view()
 
@@ -27,8 +28,9 @@ def test_can_get_pdf_with_a_url_and_filename(api_rf, patch_pdf_fetching):
     )
     response = pdf_view(request)
     assert response.status_code == HTTPStatus.OK
+    assert response.getvalue() != b""
     assert response["Content-Type"] == "application/pdf"
-    assert response["Content-Disposition"] == "attachment; filename=hello.pdf"
+    assert response["Content-Disposition"] == 'attachment; filename="hello.pdf"'
 
 
 def test_can_choose_pdf_content_disposition(api_rf, patch_pdf_fetching):
@@ -42,7 +44,7 @@ def test_can_choose_pdf_content_disposition(api_rf, patch_pdf_fetching):
         },
     )
     response = pdf_view(request)
-    assert response["Content-Disposition"] == "inline; filename=hello.pdf"
+    assert response["Content-Disposition"] == 'inline; filename="hello.pdf"'
 
 
 def test_browserless_failure_should_return_503(api_rf, fail_pdf_fetching):

@@ -7,7 +7,7 @@ from rest_framework.views import APIView
 
 from .. import pdf, serializers
 from ..client import BrowserlessClientError
-from .response import get_pdf_response
+from .response import PdfResponse
 
 
 class UrlToPdf(APIView):
@@ -30,9 +30,10 @@ class UrlToPdf(APIView):
             return Response(
                 status=HTTPStatus.SERVICE_UNAVAILABLE, data={"error": str(e)}
             )
-        response = get_pdf_response(
-            pdf_content=pdf_content,
-            filename=str(serializer.validated_data.get("filename")),
-            content_disposition=serializer.validated_data.get("content_disposition"),
+        return PdfResponse(
+            pdf_content,
+            filename=str(serializer.validated_data["filename"]),
+            content_disposition=serializer.validated_data.get(
+                "content_disposition", "attachment"
+            ),
         )
-        return response

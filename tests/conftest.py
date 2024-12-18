@@ -21,7 +21,9 @@ def pytest_configure(config):
 
 @pytest.fixture
 def patch_pdf_fetching(monkeypatch):
-    monkeypatch.setattr("django_browserless.pdf.client.fetch_pdf", lambda **_: b"")
+    monkeypatch.setattr(
+        "django_browserless.pdf.client.fetch_pdf", lambda **_: b"content"
+    )
 
 
 @pytest.fixture

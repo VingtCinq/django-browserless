@@ -17,8 +17,9 @@ def test_can_get_pdf_with_a_url_and_filename(rf, patch_pdf_fetching):
     request = rf.post("", data={"url": "http://example.com", "filename": "hello.pdf"})
     response = django_views.url_to_pdf(request)
     assert response.status_code == HTTPStatus.OK
+    assert response.getvalue() != b""
     assert response["Content-Type"] == "application/pdf"
-    assert response["Content-Disposition"] == "attachment; filename=hello.pdf"
+    assert response["Content-Disposition"] == 'attachment; filename="hello.pdf"'
 
 
 def test_can_choose_pdf_content_disposition(rf, patch_pdf_fetching):
@@ -32,7 +33,7 @@ def test_can_choose_pdf_content_disposition(rf, patch_pdf_fetching):
         },
     )
     response = django_views.url_to_pdf(request)
-    assert response["Content-Disposition"] == "inline; filename=hello.pdf"
+    assert response["Content-Disposition"] == 'inline; filename="hello.pdf"'
 
 
 def test_browserless_failure_should_return_503(rf, fail_pdf_fetching):
